@@ -25,43 +25,115 @@
 - [x] 自动更新（GUI）
 - [x] 弹幕指令控制
 ### Docker
-```bash
 # 创建配置文件
+```bash
 mkdir -p <your path>/etc
+```
+```bash
 wget -O <your path>/etc/bilidanmaku-api.yaml  https://github.moeyy.xyz/https://raw.githubusercontent.com/xbclub/BilibiliDanmuRobot/master/etc/bilidanmaku-api.yaml
+```
 # 启动容器
+```bash
 docker run -itd --name bilibilidanmurobot --restart=always -v <your path>:/app/data xbclub/bilibilidanmurobot:latest
+```
 # 扫码登录
+```bash
 docker logs bilibilidanmurobot
 ```
 ###  构建环境
  * golang version 1.21+
 ### 构建指令
-```
- # 获取构建依赖
+
+# 获取构建依赖
+```bash
  go mod download
+```
  # 构建软件
+```bash
  go build cli/bilidanmaku.go
 ```
 #### linux使用musl工具链编译musl全静态可执行文件指令
 ##### 以下以x64为例
-```bash
+
 # 指定编译工具链，可通过https://musl.cc/下载
+```bash
 export CC=/home/user/下载/x86_64-linux-musl-native/bin/gcc
+```
+```bash
 export CXX=/home/user/下载/x86_64-linux-musl-native/bin/g++
+```
+```bash
 export CFLAGS="-I/home/user/下载/x86_64-linux-musl-native/include"
+```
+```bash
 export LDFLAGS="-I/home/user/下载/x86_64-linux-musl-native/lib -Wl,-Bstatic"
-
+```
 # 禁用 Cgo，避免引入动态库
-export CGO_ENABLED=0                                      
+```bash
+export CGO_ENABLED=0 
+```
+```bash                                     
 export GOOS=linux
+```
 # 指定编译架构
+```bash
 export GOARCH=amd64
-
+```
  # 获取构建依赖
+```bash
  go mod download
+ ```
  # 构建软件
+```bash
  go build cli/bilidanmaku.go
+```
+Docker编译环境
+
+docker go镜像： golang:1.24-alpine
+
+二进制编译部分
+# clone 仓库
+```bash
+git clone https://github.com/xbclub/BilibiliDanmuRobot.git
+```
+#拉取依赖
+```bash
+cd BilibiliDanmuRobot
+```
+```bash
+go mod tidy
+```
+# 编译产出物
+```bash
+GOOS=linux GOARCH=你所需架构 go build -v -o BilibiliDanmuRobot -ldflags "-X main.Version=GIT TAG的版本号（可以自定义）" --trimpath
+```
+构建docker 镜像
+注意构建镜像需要二进制本体重命名为app，并将app二进制文件和etc文件夹放入app/data 目录，目录结构为 app/app ,
+运行时需要将文件夹挂载入docker容器的 /app/data 目录，并且需要将etc文件夹放入挂载目录中,最终结构为 app/app,app/data/etc
+```
+from alpine
+
+run sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories && apk add --no-cache tzdata
+copy app /app
+run mkdir /app/data
+workdir /app/data
+ENTRYPOINT ["/app/BilibiliDanmuRobot"]
+```
+运行容器
+# 创建配置文件
+```bash
+mkdir -p <your path>/etc
+```
+```
+wget -O <your path>/etc/bilidanmaku-api.yaml  https://github.moeyy.xyz/https://raw.githubusercontent.com/xbclub/BilibiliDanmuRobot/master/etc/bilidanmaku-api.yaml
+```
+# 启动容器
+```bash
+docker run -itd --name bilibilidanmurobot --restart=always -v <your path>:/app/data xbclub/bilibilidanmurobot:latest
+```
+# 扫码登录
+```
+docker logs bilibilidanmurobot
 ```
 ### 鸣谢
 - github.com/k-si/bilibili_live
