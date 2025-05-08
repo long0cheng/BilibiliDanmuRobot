@@ -55,7 +55,7 @@ docker logs bilibilidanmurobot
 #### linux使用musl工具链编译musl全静态可执行文件指令
 ##### 以下以x64为例
 
-# 指定编译工具链，可通过https://musl.cc/下载
+# 指定编译工具链，可通过 https://musl.cc/ 下载
 ```bash
 export CC=/home/user/下载/x86_64-linux-musl-native/bin/gcc
 ```
