@@ -28,9 +28,9 @@
 ```bash
 # 创建配置文件
 mkdir -p <your path>/etc
-wget -O <your path>/etc/bilidanmaku-api.yaml  https://github.moeyy.xyz/https://raw.githubusercontent.com/xbclub/BilibiliDanmuRobot/master/etc/bilidanmaku-api.yaml
+wget -O <your path>/etc/bilidanmaku-api.yaml  https://github.moeyy.xyz/https://raw.githubusercontent.com/long0cheng/BilibiliDanmuRobot/master/etc/bilidanmaku-api.yaml
 # 启动容器
-docker run -itd --name bilibilidanmurobot --restart=always -v <your path>:/app/data xbclub/bilibilidanmurobot:latest
+docker run -itd --name bilibilidanmurobot --restart=always -v <your path>:/app/data long0cheng/bilibilidanmurobot:latest
 # 扫码登录
 docker logs bilibilidanmurobot
 ```
